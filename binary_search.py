@@ -17,19 +17,33 @@ def binary_search(arr, target, start = 0, end = None):
 		return mid
 	return binary_search(arr, target, start, end)
 
+def binary_search_iterative(arr, target):
+	end = len(arr) -1
+	start = 0
+	while(start <= end):
+		mid = (start + end) //2
+		if arr[mid] < target:
+			start = mid + 1
+		elif arr[mid] > target:
+			end = mid - 1
+		else:
+			return mid
+	if start <= end and arr[mid] != target:
+		return None
+
 def main():
 	r = []
 	a = range(-109,120)
-	r[:] = a + [121,222]
+	r[:] = a + [-121,222]
 	#print(binary_search(a,119))
 	random.shuffle(r)
 	
 	for t in r:
 		try:
-			if a[binary_search(a,t)] != t:
+			if a[binary_search_iterative(a,t)] != t:
 				print("Failed!")
 				print("target {}".format(t))
-				print("found {}".format(a[binary_search(a,t)]))
+				#print("found {}".format(a[binary_search(a,t)]))
 		except Exception, e:
 			print(e)
 	
