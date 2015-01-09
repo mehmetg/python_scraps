@@ -168,6 +168,13 @@ def matrix_zero_out(mat):
 		for i in xrange(n): mat[i][zc] = 0
 	for zr in zero_rows:					
 		for i in xrange(m): mat[zr][i] = 0
+#Q1.8
+def rotate_string(s, n):
+	n = n % len(s)
+	s = s[-n:] + s[:-n]
+	return s
+def is_rotation(r,s):
+	return s in r+r 
 def main_1p1():
 	test_strings = ["abc", "aabc", "aaabbbccc", "aaa", "aaaaaaaaaaaaaz", "", " "]
 	print("O(n**2):")
@@ -218,7 +225,18 @@ def main_1p7():
 	print("-----")
 	matrix_zero_out(x)
 	mprint(x)
+def main():
+	import random, string
+	s = string.ascii_uppercase 
+	n = random.randrange(len(s))
+	r = rotate_string(s, n)
 	
-
+	print(s)
+	print(r)
+	print(is_rotation(r,s))
+	r = list(r)
+	random.shuffle(r)
+	r = "".join(r)
+	print(is_rotation(r,s))
 if __name__ == '__main__':
 	main()
