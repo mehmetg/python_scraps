@@ -131,18 +131,45 @@ class LList(object):
 		lt_tail.next_node = ge_head
 		self.head = lt_head
 
+def add_ll_numbers_rec(num1, num2, carry, LSD_head = True):
+	if num1 == None and num2 == None and carry == 0:
+		return None
+	
+	val = carry
+
+	if num1:
+		val += num1.data
+		next_num1 = next_num1.next_node
+	else:
+		next_num1 = None
+
+	if num2:
+		val += num2.data
+		next_num2 = num2.next_node
+	else:
+		next_num2 = None
+
+	carry = 1 if val > 9 else 0
+	val = val % 10
+	new_digit = Node(val)
+	part_sum = add_ll_numbers_rec(next_num1, next_num2, carry)
+	if part_sum:
+		new_digit.next_node = part_sum
+		part_sum = new_digit
+	else:
+		part_sum = new_digit
+
+	return part_sum
 
 
 
-
-
-def main():
+def main_old():
 	import random
 	my_ll = LList()
 	arr = []
 
 	for j in xrange(30):
-		for i in xrange(10):
+		for i in xrange(4):
 			arr.append(i)
 	random.shuffle(arr)
 	for x in arr:
@@ -155,8 +182,9 @@ def main():
 	#node = Node(-999)
 	#my_ll.return_kth_last_rec(3, my_ll.head, node)
 	#print(node)
-	my_ll.partition(5)
+	my_ll.partition(1)
 	print(my_ll.to_array())
-
+def main():
+	
 if __name__ == '__main__':
 	main()
