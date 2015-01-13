@@ -44,7 +44,7 @@ def is_anagram(s, t):
 				return False
 		return True
 #Q1.4
-def escape_space(s):
+def escape_space_n_sq(s):
 	'''
 	Assume Java rules:
 	'''
@@ -66,6 +66,26 @@ def escape_space(s):
 		#print "".join(s)
 		#print(len(s))
 		#print(i)
+	return "".join(s)
+
+def escape_space_2n(s):
+	l = 0
+	for c in s:
+		if c == " ":
+			l += 2
+	s = list(s)
+	orig_len = len(s)
+	s = s + ["-"] * l
+	tail = len(s) - 1
+	for i in xrange(orig_len-1,-1,-1):
+		if s[i] != " ":
+			s[tail] = s[i]
+			tail -= 1
+		else:
+			s[tail] =   "0"
+			s[tail-1] = "2"
+			s[tail-2] = "%"
+			tail -= 3
 	return "".join(s)
 #Q1.5
 def str_compress(s):
@@ -173,6 +193,16 @@ def rotate_string(s, n):
 	n = n % len(s)
 	s = s[-n:] + s[:-n]
 	return s
+
+def rotate_string_in_place(s,n):
+	l = len(s)
+	n =  n % l
+	s = list(s)
+	for  i in range(0,n):
+		s[i], s[l-n+i] =  s[l-n+i], s[i]
+		#s[i], s[i-n] =  s[i-n], s[i]
+	return "".join(s)
+
 def is_rotation(r,s):
 	return s in r+r 
 def main_1p1():
@@ -194,10 +224,11 @@ def main_1p3():
 	s1 = "111111111111111211111az"
 	s2 = "a121111111111111111111z"
 	print(is_anagram(s1,s2))
-def main1_p4():
+def main_1p4():
 	s = ["","a b cdddd d", "a b b s s s s  s ssss          ", " ", "         s", "a        "]
-	print(s[1])
-	print(escape_space(s[1]))
+	for ss in s:
+		print("\"{}\"".format(ss))
+		print(escape_space_2n(ss))
 def main_1p5():
 	s = "aaaaaaaaabcaaaaaaaccccccddddddb"
 	print(s)
@@ -225,7 +256,7 @@ def main_1p7():
 	print("-----")
 	matrix_zero_out(x)
 	mprint(x)
-def main():
+def main_1p8():
 	import random, string
 	s = string.ascii_uppercase 
 	n = random.randrange(len(s))
@@ -238,5 +269,15 @@ def main():
 	random.shuffle(r)
 	r = "".join(r)
 	print(is_rotation(r,s))
+def main():
+	import random, string
+	s = string.ascii_uppercase 
+	n = random.randrange(len(s))
+	r = rotate_string(s, 2)
+	r2 = rotate_string_in_place(s, 2)
+	print(s)
+	print(r)
+	print(r2)
+	print(r==r2)
 if __name__ == '__main__':
 	main()
