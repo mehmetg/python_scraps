@@ -44,7 +44,7 @@ class MultiStack(object):
 			ret = 0
 		return ret
 
-class Stack(object):
+class StackWithMin(object):
 	arr = None
 	stack_min = None
 	stack_ptr = None
@@ -62,7 +62,7 @@ class Stack(object):
 			self.arr.append((val, self.stack_min))
 
 	def peek(self):
-		if self.stack_ptr < len(self.arr):
+		if self.stack_ptr >= 0 and self.stack_ptr < len(self.arr):
 			return self.arr[self.stack_ptr][0]
 		else:
 			return None
@@ -71,6 +71,37 @@ class Stack(object):
 			ret = self.arr[self.stack_ptr]
 			self.stack_min = ret[1]
 			ret = ret[0]
+			self.stack_ptr -= 1
+		else:
+			ret = None
+		return ret
+	def get_min(self):
+		return self.stack_min
+	def get_size(self):
+		return (self.stack_ptr+1)
+
+class Stack(object):
+	arr = None
+	stack_ptr = None
+	def __init__(self):
+		self.arr = []
+		self.stack_ptr = -1
+
+	def push(self, val):
+		self.stack_ptr += 1
+		if self.stack_ptr < len(self.arr):
+			self.arr[self.stack_ptr] = val
+		else:
+			self.arr.append(val)
+
+	def peek(self):
+		if self.stack_ptr >= 0 and self.stack_ptr < len(self.arr):
+			return self.arr[self.stack_ptr]
+		else:
+			return None
+	def pop(self):
+		if self.stack_ptr >= 0:
+			ret = self.arr[self.stack_ptr]
 			self.stack_ptr -= 1
 		else:
 			ret = None
@@ -109,6 +140,70 @@ class StackOfStacks():
 			ret = None
 		return ret
 
+class TowerStack(Stack):
+	def push(self, val):
+		top = self.peek()
+		if top is not None and top < val:
+			raise Exception("Tower push error! Val > Top of Stack!")
+		else:
+			super(TowerStack, self).push(val)
+def move_towers(num, src, buf, dst):
+	if(num < 1):
+		return
+	move_towers(num-1, src, dst, buf)
+	move_top(src, dst)
+	move_towers(num-1, buf, src, dst)
+def move_top(src, dst):
+	disk = src.pop()
+	if disk is not None:
+		dst.push(disk)
+def solve_tower_of_hanoi():
+	n = 4
+	towers = []
+	for i in xrange(3):
+		towers.append(TowerStack())
+	for i in xrange(n):
+		towers[0].push(n-i)
+	for tower in towers:
+		print(tower.arr[:tower.stack_ptr+1])
+	move_towers(n, towers[0], towers[1], towers[2])
+	for tower in towers:
+		print(tower.arr[:tower.stack_ptr+1])
+class myQueue(object):
+	s1 = s2 = None
+
+	def __init__(self):
+		self.s1 = Stack()
+		self.s2 = Stack()
+
+	def queue(self, val):
+		size1 = self.s1.get_size()
+		size2 = self.s2.get_size() 
+		if(size1 == 0 and size2 > 0):
+			while size2:
+				self.s1.push(self.s2.pop())
+				size2 = self.s2.get_size()
+		self.s1.push(val)
+	def dequeue(self):
+		size1 = self.s1.get_size()
+		size2 = self.s2.get_size() 
+		if(size2 == 0 and size1 > 0):
+			while size1:
+				self.s2.push(s1.pop())
+				size1 = self.s1.get_size()
+		val = self.s2.pop()
+		return val
+	def peek(self):
+		size1 = self.s1.get_size()
+		size2 = self.s2.get_size() 
+		if(size2 == 0 and size1 > 0):
+			while size1:
+				self.s2.push(self.s1.pop())
+				size1 = self.s1.get_size()
+		val = self.s2.peek()
+		return val
+
+
 
 def main():
 
@@ -141,7 +236,7 @@ def main():
 		raw_input()
 		a = s.pop()
 		print(a)
-	'''
+	
 	ss = StackOfStacks(5)
 
 	for i in xrange(13):
@@ -156,6 +251,19 @@ def main():
 	for i in xrange(20):
 		print(ss.pop())
 		#print("num stacks {}".format(len(ss.stacks)))
-
+	
+	solve_tower_of_hanoi()
+	'''
+	s = myQueue()
+	for i in xrange(20):
+		s.queue(i)
+	for i in xrange(15):
+		print("peek: {}".format(s.peek()))
+		print("dequeue: {}".format(s.dequeue()))
+	for i in xrange(20):
+		s.queue(i)
+	for i in xrange(34):
+		print("peek: {}".format(s.peek()))
+		print("dequeue: {}".format(s.dequeue()))
 if __name__ == '__main__':
 	main()
