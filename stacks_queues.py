@@ -110,6 +110,18 @@ class Stack(object):
 		return self.stack_min
 	def get_size(self):
 		return (self.stack_ptr+1)
+	def sort_desc(self):
+		temp = Stack()
+		while self.get_size() > 0:
+			val = self.pop()
+			if(temp.get_size() <= 0 or temp.peek() < val):
+				temp.push(val)
+			else:
+				while temp.get_size() > 0 and temp.peek() > val:
+					self.push(temp.pop())
+				temp.push(val)
+		temp.arr, self.arr = self.arr, temp.arr
+		temp.stack_ptr, self.stack_ptr = self.stack_ptr, temp.stack_ptr
 
 class StackOfStacks():
 	stacks = None
@@ -253,8 +265,7 @@ def main():
 		#print("num stacks {}".format(len(ss.stacks)))
 	
 	solve_tower_of_hanoi()
-	'''
-	s = myQueue()
+		s = myQueue()
 	for i in xrange(20):
 		s.queue(i)
 	for i in xrange(15):
@@ -265,5 +276,17 @@ def main():
 	for i in xrange(34):
 		print("peek: {}".format(s.peek()))
 		print("dequeue: {}".format(s.dequeue()))
+	'''
+	import random
+	s = Stack()
+	a = range(0,12)
+	random.shuffle(a)
+	print(a)
+	for x in a:
+		s.push(x)
+	s.sort_desc()
+	for i in xrange(15):
+		print(s.pop())
+
 if __name__ == '__main__':
 	main()
