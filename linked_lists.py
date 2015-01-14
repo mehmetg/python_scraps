@@ -196,22 +196,29 @@ class LList(object):
 		fr = self.head
 		t = LList()
 		count = 0
-		while sr and fr and fr.next_node:
+		while sr and fr:
+			count += 1
 			node = sr
-			sr = sr.next_node
-			fr = fr.next_node.next_node
-			if(fr):
-				t.prepend(node)
-				count += 1
-			else:
+			t.prepend(node)
+			if(fr.next_node):
+				sr = sr.next_node
+				fr = fr.next_node.next_node
+			else: #even numbers of elements
 				break
-		pr = t.head
-		while sr and pr:
-			if sr != pr:
+		if(fr is sr):
+			return True
+			sr = sr.next_node
+		pt = t.head
+		while sr and pt:
+			if(sr.data != pt.data):
 				return False
 			sr = sr.next_node
-			pr = pr.next_node
-		return True
+			pt = pr.next_node
+		return True 
+
+
+
+
 
 
 
@@ -329,14 +336,13 @@ def main():
 	#for x in xrange(1):
 	#	num1.append(Node(random.randrange(0,10)))
 	#print_simple_ll(num1.head, False)
-	for i in xrange(10):
-		num2 = LList()
-		for x in  xrange(10):
-			num2.append(Node(x))
-		print_simple_ll(num2.head, False)
-		num2.make_loopy(i)
-		print_simple_ll(num2.head, False, 24)
-		print(num2.find_loop_start())
+	middle = 0
+	for x in xrange(middle):
+		num2.append(Node(x))
+	for y in xrange(middle, -1, -1):
+		num2.append(Node(y))
+	print(num2.to_array())
+	print(num2.is_palindrome())
 	#result = add_ll_numbers_rec_lsd_first(num1.head, num2.head, 0)
 	#print_simple_ll(result)	
 	#result = add_ll_numbers_rec_lsd_last(num1.head, num2.head)
