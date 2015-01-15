@@ -215,6 +215,47 @@ class myQueue(object):
 		val = self.s2.peek()
 		return val
 
+class Pet(object):
+	CAT = 0
+	DOG = 1
+	species = None
+	def __init__(self, spec):
+		self.species = spec
+
+from linked_lists import LList, Node
+class PetQueue(LList):
+	def __init__(self):
+		self.pq = LList()
+	def enqueue(self, pet):
+		self.pq.append(pet)
+	def dequeueAny(self):
+		return self.pq.pop()
+	def peek(self):
+		return self.pq.head
+	def _dequeue(self, spec):
+		node = self.pq.head
+		prev = None
+		if node:
+			while node:
+				if node.data.species == spec:
+					break
+				prev = node
+				node = node.next_node
+			if(prev == None):
+				node = self.pq.pop()
+			elif node:
+				prev.next_node = node.next_node
+		else:
+			node = None
+		return node
+	def dequeueCat(self):
+		return self._dequeue(Pet.CAT)
+	def dequeueDog(self):
+		return self._dequeue(Pet.DOG)
+
+
+	
+
 
 
 def main():
@@ -278,15 +319,24 @@ def main():
 		print("dequeue: {}".format(s.dequeue()))
 	'''
 	import random
-	s = Stack()
-	a = range(0,12)
-	random.shuffle(a)
-	print(a)
-	for x in a:
-		s.push(x)
-	s.sort_desc()
-	for i in xrange(15):
-		print(s.pop())
-
+	pq = PetQueue()
+	for i in xrange(1):
+		for x in xrange(10):
+			n  = Node(Pet(0))
+			print(n.data.species)
+			pq.enqueue(n)
+		print("--------")
+		for i in xrange(10):
+			n = pq.dequeueDog()
+			if n:
+				print(n.data.species)
+			else:
+				print(None)
+		for i in xrange(10):
+			n = pq.dequeueCat()
+			if n:
+				print(n.data.species)
+			else:
+				print(None)
 if __name__ == '__main__':
 	main()
