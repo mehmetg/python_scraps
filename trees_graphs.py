@@ -68,7 +68,8 @@ def route_available_bfs(graph, start, finish):
 			visited.append(n)
 			if n == finish:
 				return True
-			nq.extend(graph[n])
+			for adj in graph[n]:
+				if adj not in nq: nq.append(adj)
 	return False
 
 def main():
