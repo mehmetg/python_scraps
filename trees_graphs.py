@@ -46,8 +46,33 @@ def is_bin_tree_balanced(root, threshold = 1):
 		return False
 	else:
 		return True
+def route_available_dfs(graph, start, finish, visited = []):
+	visited.append(start)
+	if finish == start:
+		return True
+	for adj in graph[start]:
+		#print(visited)
+		if adj not in visited:
+			if route_available_dfs(graph, adj, finish, visited):
+				return True
+	return False
+def route_available_bfs(graph, start, finish):
+	visited = []
+	nq = []
+	nq.append(start)
+	while len(nq):
+		#print(nq)
+		#raw_input()
+		n = nq.pop(0)
+		if n not in visited:
+			visited.append(n)
+			if n == finish:
+				return True
+			nq.extend(graph[n])
+	return False
 
 def main():
+	'''
 	import random
 	r = False
 	a = range(11)
@@ -60,6 +85,11 @@ def main():
 	
 	print(r)
 	print(a)
-
+	'''
+	g = [[1],[11,2],[4],[1],[5],[3],[9],[8],[],[7],[0],[]]
+	print(route_available_dfs(g,6,6,[]))
+	#print(g)
+	print(route_available_bfs(g,6,6))
+	#print(g)
 if __name__ == '__main__':
 	main()
